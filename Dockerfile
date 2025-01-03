@@ -1,39 +1,41 @@
-# #FromPlatformFlagConstDisallowed: FROM --platform flag should not use constant value "linux/amd64"
-# FROM julia:latest 
+# """
+# Dockerfile du serveur TCP de riboDB
 
-# # Create user and set up directories
-# RUN useradd --create-home --shell /bin/bash ribo_tcp
-# RUN mkdir /home/ribo_tcp/app
-# RUN mkdir /home/ribo_tcp/app/public
-# RUN mkdir /home/ribo_tcp/app/public/utilisateurs
-# COPY . /home/ribo_tcp/app
-# WORKDIR /home/ribo_tcp/app
-# COPY Project.toml /home/ribo_tcp/app/
+# Copyright or © or Copr. UCBL Lyon, France;  
+# contributor : [Jean-Pierre Flandrois] ([2024/12/20])
+# [JP.flandrois@univ-lyon1.fr]
 
-# # Install system dependencies and clean up in one RUN to reduce layers
-# # no dependancies
-   
-# # Set ownership
-# RUN chown -R ribo_tcp:ribo_tcp /home/
+# This software is a computer program whose purpose is to create a TCP server interface to the riboDB sequence database.
 
-# # Switch to ribo_tcp user
-# USER ribo_tcp
+# This software is governed by the [CeCILL|CeCILL-B|CeCILL-C] license under French law and
+# abiding by the rules of distribution of free software.  You can  use, 
+# modify and/ or redistribute the software under the terms of the [CeCILL|CeCILL-B|CeCILL-C]
+# license as circulated by CEA, CNRS and INRIA at the following URL
+# "http://www.cecill.info". 
 
-# # Configure ports
-# EXPOSE 8080
+# As a counterpart to the access to the source code and  rights to copy,
+# modify and redistribute granted by the license, users are provided only
+# with a limited warranty  and the software's author,  the holder of the
+# economic rights,  and the successive licensors  have only  limited
+# liability. 
 
-# # Set environment variables LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format
-# ENV JULIA_DEPOT_PATH="/home/ribo_tcp/.julia"
-# ENV JULIA_REVISE="off"
+# In this respect, the user's attention is drawn to the risks associated
+# with loading,  using,  modifying and/or developing or reproducing the
+# software by the user in light of its specific status of free software,
+# that may mean  that it is complicated to manipulate,  and  that  also
+# therefore means  that it is reserved for developers  and  experienced
+# professionals having in-depth computer knowledge. Users are therefore
+# encouraged to load and test the software's suitability as regards their
+# requirements in conditions enabling the security of their systems and/or 
+# data to be ensured and,  more generally, to use and operate it in the 
+# same conditions as regards security. 
 
-# # ENV PORT="8020"
-# # ENV WSPORT="8080"
+# The fact that you are presently reading this means that you have had
+# knowledge of the [CeCILL|CeCILL-B|CeCILL-C] license and that you accept its terms.
+
+# """
 
 
-# # Install Julia packages
-# RUN julia --project=. -e "import Pkg; using Pkg; Pkg.resolve(); Pkg.instantiate(); Pkg.precompile();"
-
-# ENTRYPOINT ["julia", "--project=.", "server.jl"]
 FROM julia:latest 
 
 # Create user and set up directories
@@ -61,4 +63,4 @@ RUN julia --project=. -e "import Pkg; Pkg.resolve(); Pkg.instantiate(); Pkg.prec
 EXPOSE 8080
 
 # Set entrypoint
-ENTRYPOINT ["julia", "--project=.", "server.jl"]
+ENTRYPOINT ["julia", "--project=.", "ribodb_server.jl"]

@@ -5,8 +5,7 @@ Copyright or © or Copr. UCBL Lyon, France;
 contributor : [Jean-Pierre Flandrois] ([2024/12/20])
 [JP.flandrois@univ-lyon1.fr]
 
-This software is a computer program whose purpose is to [describe
-functionalities and technical features of your software].
+This software is a computer program whose purpose is to create a TCP server interface to the riboDB sequence database.
 
 This software is governed by the [CeCILL|CeCILL-B|CeCILL-C] license under French law and
 abiding by the rules of distribution of free software.  You can  use, 

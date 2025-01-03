@@ -1,4 +1,4 @@
-# riboDB TCP
+# TCP riboDB
 
 Ce serveur TCP est le moteur de réponses pour le site riboDB.
 client_utile.jl n'est
@@ -49,7 +49,15 @@ Cette hiérarchie est à créer dans ce répertoire.
 
 ### Pilote
 
-C'est __server.jl__ qui orchestre tout  après avoir fabriqué _gallica_ via __Module_bnf.jl__ en se mettant à l'écoute du client.
+En dehors d'un docker il suffit de lancer:
+
+```julia --project=. ribodb_server.jl```
+
+Après quelque temps, il retourne une phrase disant que _gallica_ est prête et qu'il écoute.
+```gallica fait```
+```à l'écoute .../TCPriboDB```
+
+C'est __ribodb_server.jl__ qui orchestre tout  après avoir fabriqué _gallica_ via __Module_bnf.jl__ en se mettant à l'écoute du client.
 Dans _gallica_ le format du commentaire fasta est inversé pour mettre la hiérarchie taxonomique en tête ce qui accélère les recherches dans la majorité des cas, de l'ordre de 10%. 
 ```Legionella_pneumophila_subsp._pneumophila-Legionella-Legionellaceae-Legionellales-Gammaproteobacteria-Pseudomonadota-Bacteria#S~GCF_000586135.1~NZ_JFID01000033.1~[1666..2361]~9189190```
 ```NZ_JFID01000033.1~[1666..2361]```est conservé pour avoir un identifiant unique en cas de protéines présentes plusieurs fois.
@@ -143,7 +151,9 @@ Elles ont pour vocation de disparaître dans la version site web.
     Sending message: F1;us4;Bacillota;;1735725055995_FyIxLgVG
     ["public/utilisateurs/task_1735725055995_FyIxLgVG/atelier_1735725055995_FyIxLgVG", "us4", "79013", "262"]
 
-Le serveur ne traite qu'une requête à la fois et assure l'extraction, la sauvegarde des fasta dans _public/utilisateurs_ et il retourne la localisation de l'atelier , le nom de la famille et les nombres de séquences recrutées dans _uniques_ et _multiples_.
+Le serveur ne traite qu'une requête à la fois et assure l'extraction, la sauvegarde des fasta dans _public/utilisateurs_.
+Chaque retour du serveur comporte le chemin vers "task/atelier" car les requêtes étant envoyées séquentiellement et potentiellement pas plusieurs utilisateurs, il n'y a pas de moyen de ne recevoir cette information au début ou à la fin de l'interrogation (ou pas de solution garantie).
+Outre la retourne la localisation de l'atelier, on récupère le nom de la famille et les nombres de séquences recrutées dans _uniques_ et _multiples_.
 
 ```["public/utilisateurs/task_1735725055995_FyIxLgVG/atelier_1735725055995_FyIxLgVG", "ul1", "78894", "178"]```
 
@@ -158,16 +168,27 @@ Tout est dans les classeur _task_ et _atelier_ et classé par famille.
 où l'on retrouve les 4 fichiers habituels.
 
 ## Performances
-Les performances sont acceptables et par exemple rechercher tous les fasta de la banque pour Bacillota sans critère de qualité se fait en 11 secondes.
-Le tmeps de réalisation est linéaire en fonction du nombre de recherches (taxonomie et qualité et nombre de familles), rechercher Escherichia ou Esch prend le même temps.
 
-Le serveur est multi-utilisateur, le temps dépend linéairement du nombre d'utilisateurs simultanés, mais même pour 6 utilisateurs strictement simultanés il reste acceptable et la plupart des recherches se font en moins d'une minute.
+Les performances sont acceptables et par exemple rechercher tous les fasta de la banque pour Bacillota sans critère de qualité se fait en 11 secondes.
+Le tmeps de réalisation est linéaire en fonction du nombre de recherches (taxonomie et qualité et nombre de familles), rechercher "Escherichia" ou "Esch" prend le même temps.
+
+Le serveur est multi-utilisateur, le temps de réponse dépend linéairement du nombre d'utilisateurs simultanés, mais même pour 6 utilisateurs strictement simultanés il reste acceptable et la plupart des recherches se font en moins d'une minute.
 
 ## Docker
 
 Tout est normalement prévu pour la mise en Docker.
+Depuis le classeur _TCPriboDB_ on lance la construction du conteneur:
+```docker build -t tcpribodb  .```
+Puis on peut l'activer:
+```docker run  -it  -p 8020:8080 tcpribo01```
+Mais il est préférable de placer _ENSEMBLEdes_serRP_V2_ et _public..._ en dehors du conteneur:
+```docker run  -it  -p 8020:8080   --mount type=bind,src=/home/flandrs/PKXPLORE/ENSEMBLEdes_serRP_V2,target=/home/ribo_tcp/app/BNKriboDB_SER  --mount type=bind,source=/home/flandrs/PKXPLORE/public,target=/home/ribo_tcp/app/public  ImageId```
+Sur mon mac c'est:
+```docker run  -it  -p 8020:8080   --mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/ENSEMBLEdes_serRP_V2,target=/home/ribo_tcp/app/BNKriboDB_SER  --mount type=bind,source=/Users/jean-pierreflandrois/PKXPLORE/public,target=/home/ribo_tcp/app/public tcpribodb```
+__attention__ il faut actuellement 45Go alloés à Docker pour que Docker fonctionne ! sinon docker run se termine _sans_ information !
 
-##
+## License
+
 """
 ribodb_server.jl Le serveur TCP de riboDB
 
@@ -175,8 +196,7 @@ Copyright or © or Copr. UCBL Lyon, France;
 contributor : [Jean-Pierre Flandrois] ([2024/12/20])
 [JP.flandrois@univ-lyon1.fr]
 
-This software is a computer program whose purpose is to [describe
-functionalities and technical features of your software].
+This software is a computer program whose purpose is to create a TCP server interface to the riboDB sequence database.
 
 This software is governed by the [CeCILL|CeCILL-B|CeCILL-C] license under French law and
 abiding by the rules of distribution of free software.  You can  use, 
