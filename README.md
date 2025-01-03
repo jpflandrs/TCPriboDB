@@ -1,7 +1,6 @@
 # TCP riboDB
 
 Ce serveur TCP est le moteur de réponses pour le site riboDB.
-client_utile.jl n'est
 
 ## Préparation de la BNF
 
