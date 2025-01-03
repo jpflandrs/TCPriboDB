@@ -185,7 +185,8 @@ Mais il est préférable de placer _ENSEMBLEdes_serRP_V2_ et _public..._ en deho
 ```docker run  -it  -p 8020:8080   --mount type=bind,src=/home/flandrs/PKXPLORE/ENSEMBLEdes_serRP_V2,target=/home/ribo_tcp/app/BNKriboDB_SER  --mount type=bind,source=/home/flandrs/PKXPLORE/public,target=/home/ribo_tcp/app/public  ImageId```
 Sur mon mac c'est:
 ```docker run  -it  -p 8020:8080   --mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/ENSEMBLEdes_serRP_V2,target=/home/ribo_tcp/app/BNKriboDB_SER  --mount type=bind,source=/Users/jean-pierreflandrois/PKXPLORE/public,target=/home/ribo_tcp/app/public tcpribodb```
-__attention__ il faut actuellement 45Go alloés à Docker pour que Docker fonctionne ! sinon docker run se termine _sans_ information !
+__attention__ il faut actuellement 45Go alloués à Docker pour que Docker fonctionne ! sinon docker run se termine _sans_ information !
+__attention__ sans Docker on utilise seulement 21Go et les performances sont meilleures de l'ordre de 20%. Si on opte pour cette solution simple (et pas moins stable) il faut soit intégrer BNKriboDB_SER dans le classeur soit faire un lien, soit modifier le programme ```:)```.
 
 ## License
 
