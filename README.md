@@ -1,6 +1,9 @@
 # TCP riboDB
 
-Ce serveur TCP est le moteur de réponses pour le site riboDB.
+Ce serveur TCP est le moteur de réponses pour le site riboDB. Il peut cependant être employé seul:
+
+- 1 pour avoir ses fonctionnalités sur une machine locale ;
+- 2 pour construire des groupes d'intérêt lors de la construction de Bases de Connaissances (BdC) pour un projet (et dans ce cas il est simple d'étendre les familles au _core_ génome).
 
 ## Préparation de la BNF
 
