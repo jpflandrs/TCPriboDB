@@ -34,7 +34,7 @@ et Archaea
 Le principe de la préparation est d'associer les séquences de Bacteria et Archaea des familles partagées dans un même fichier tout en créant pour chaque famille et chaque type de protéines, un dictionnaire ```Dict{String,String}``` reliant le commentaire fasta à sa séquence.
 Le tout est _sérialisé_ et prêt à être utilisé. Une option future serait d'utiliser une compression supplémentaire par ```zip``` pour favoriser les échanges (car ceci permet une compression 77%).
 
-C'est __prepareBNF.jl__ qui fait le job. Il n'est __pas situé dans le classeur du serveur__, sa place est dans le classeur du site web car il est vraisemblable que c'est via le site web dans une page d'administration qu'il sera utilisé. Comme dans toutes mes phases de mise au point les adresses sont dans le fichier.jl
+C'est __prepareBNF.jl__ qui fait le job. Il n'est __pas situé dans le classeur du serveur__, sa place est dans le classeur du site web car il est vraisemblable que c'est via le site web dans une page d'administration qu'il sera utilisé. Comme dans toutes mes phases de mise au point les adresses sont dans le fichier.jl dans __Main__
 
 ```D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"```
 ```D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"```
