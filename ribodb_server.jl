@@ -50,19 +50,19 @@ knowledge of the [CeCILL|CeCILL-B|CeCILL-C] license and that you accept its term
 function uniqueutilisateurserveur(suffixeperso::String)
     #println(pwd())
     fichtempo::String =  joinpath("public","utilisateurs","task_"*suffixeperso)
-    println("tempo $fichtempo")
+    #println("tempo $fichtempo")
     if ispath(fichtempo) ==0
         mkdir(fichtempo)
-        println("tempocree $fichtempo")
+        #println("tempocree $fichtempo")
     end
     
     atelier::String=joinpath(fichtempo,"atelier_"*suffixeperso)
-    println("atelier $atelier")
+    #println("atelier $atelier")
     if ispath(atelier) ==0
         mkdir(atelier)
-        println("atelier cree $atelier")
+        #println("atelier cree $atelier")
     end
-    println("putzen ",joinpath("public","utilisateurs"))
+    #println("putzen ",joinpath("public","utilisateurs"))
     putzen(joinpath("public","utilisateurs")) #/home/ribo_tcp/app/
     return atelier
 end
@@ -74,7 +74,7 @@ end
 
 function putzen(classeur::String)
     monclasseur::Vector{String}=readdir(classeur,join=true)
-    println("putzen de $monclasseur")
+    #println("putzen de $monclasseur")
     timestamp::Int64=renvoieepoch()
     #println(timestamp)
     for u in monclasseur
@@ -82,7 +82,7 @@ function putzen(classeur::String)
             #println(split(u,'_')[2])
             if timestamp - parse(Int64,split(u,'_')[2]) >3600000
                 rm(u, recursive=true)
-                println("enlevé $u")
+                #println("enlevé $u")
             end
         end
     end
@@ -179,3 +179,43 @@ function main()
 end
 
 main()
+
+"""
+
+docker build -t tcpribo . 
+
+NB /Users/jean-pierreflandrois/ a changer pour les chemins
+
+docker network create jpfnetwork =>ea5c22ece0e197b415d5d5b66e131e70e354616cc6ca177096a46a1bdcefbb0d
+
+docker run --name tcpribo --network jpfnetwork -it -p 8080:8080 \
+--mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER \
+--mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/public,target=/home/ribo_tcp/app/public \
+--mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/TCPriboDB/log/,target=/home/ribo_tcp/app/log \
+tcpribo
+
+docker run --name ribodb --network jpfnetwork -it -p 8008:8008 \
+--mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/public,target=/home/genie/app/public \
+--mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/riboDB/log,target=/home/genie/app/log \
+ribodb
+
+
+NGINX
+server {
+    listen 80;
+    server_name my_web_server;
+
+    location /api/ {
+        proxy_pass http://W:8008;  # Proxy to the web server
+    }
+
+    location /tcp/ {
+        proxy_pass http://T:8080;  # Proxy to the TCP server
+    }
+}
+
+
+clienthost = getaddrinfo("tcpribo", IPv4)[1].ip  # Resolves "tcpribo" to its IPv4 address
+port = 8080
+client = connect(host, port)
+"""
