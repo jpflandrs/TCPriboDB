@@ -57,7 +57,7 @@ function uniqueutilisateurserveur(suffixeperso::String)
     if ispath(atelier) ==0
         mkdir(atelier)
     end
-    #putzen(joinpath(pwd(),"public","utilisateurs"))
+    putzen(joinpath(pwd(),"public","utilisateurs"))
     return atelier
 end
 
@@ -66,20 +66,20 @@ function renvoieepoch()
     return dte(now())
 end
 
-# function putzen(classeur::String)
-#     monclasseur::Vector{String}=readdir(classeur,join=true)
-#     println(monclasseur)
-#     timestamp::Int64=renvoieepoch()
-#     println(timestamp)
-#     for u in monclasseur
-#         if occursin("task",u)
-#             println(split(u,'_')[2])
-#             if timestamp - parse(Int64,split(u,'_')[2]) >3600000
-#                 rm(u, recursive=true)
-#             end
-#         end
-#     end
-# end
+function putzen(classeur::String)
+    monclasseur::Vector{String}=readdir(classeur,join=true)
+    #println(monclasseur)
+    timestamp::Int64=renvoieepoch()
+    #println(timestamp)
+    for u in monclasseur
+        if occursin("task",u)
+            #println(split(u,'_')[2])
+            if timestamp - parse(Int64,split(u,'_')[2]) >3600000
+                rm(u, recursive=true)
+            end
+        end
+    end
+end
 
 function server()
     #gallica::Dict{String, Dict{String, String}} = bnf()
