@@ -49,15 +49,21 @@ knowledge of the [CeCILL|CeCILL-B|CeCILL-C] license and that you accept its term
 
 function uniqueutilisateurserveur(suffixeperso::String)
     #println(pwd())
-    fichtempo::String =  joinpath(pwd(),"public","utilisateurs","task_"*suffixeperso)
+    fichtempo::String =  joinpath("public","utilisateurs","task_"*suffixeperso)
+    println("tempo $fichtempo")
     if ispath(fichtempo) ==0
         mkdir(fichtempo)
+        println("tempocree $fichtempo")
     end
+    
     atelier::String=joinpath(fichtempo,"atelier_"*suffixeperso)
+    println("atelier $atelier")
     if ispath(atelier) ==0
         mkdir(atelier)
+        println("atelier cree $atelier")
     end
-    putzen(joinpath(pwd(),"public","utilisateurs"))
+    println("putzen ",joinpath("public","utilisateurs"))
+    putzen(joinpath("public","utilisateurs")) #/home/ribo_tcp/app/
     return atelier
 end
 
@@ -68,7 +74,7 @@ end
 
 function putzen(classeur::String)
     monclasseur::Vector{String}=readdir(classeur,join=true)
-    #println(monclasseur)
+    println("putzen de $monclasseur")
     timestamp::Int64=renvoieepoch()
     #println(timestamp)
     for u in monclasseur
@@ -76,6 +82,7 @@ function putzen(classeur::String)
             #println(split(u,'_')[2])
             if timestamp - parse(Int64,split(u,'_')[2]) >3600000
                 rm(u, recursive=true)
+                println("enlevé $u")
             end
         end
     end
