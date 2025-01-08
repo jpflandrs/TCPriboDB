@@ -171,6 +171,7 @@ function masolutiondictionnaire(initialfasta::String,monfastamiracle::Dict{Strin
                     end
                     localtete1 = rsplit(strip(join(reverse(split(split(String(l),'=')[2],'-' )),'-')*'#'*split(split(String(l),'#' ; limit=2)[2],"!!")[1],'~'),'~'; limit=2)[1]*'~'*split(split(l,'|')[2],'#')[1]
                     localtete2 = occursin("!!",l) ? strip(split(l,"!!";limit=2)[1],'~')*'='*join(split(split(l,'=')[2],'-')[1:end-1],'-')*'\n' : l*'\n'
+                    localtete3 = occursin("!!",l) ? strip(split(l,"!!";limit=2)[1],'~')*'='*join(split(split(l,'=')[2],'-')[1:end-1],'-')*'\n' : l*'\n'
                     #>Escherichia_coli|HT873X1#C~GCF_030142415.1~NZ_CP122318.1~[4098325..4098630]~562~11~!!QCG45_RS20045!36!122!0_RP.!!C.=Bacteria-Pseudomonadota-Gammaproteobacteria-Enterobacterales-Enterobacteriaceae-Escherichia-Escherichia_coli
                     # donne "Escherichia_coli-Escherichia-Enterobacteriaceae-Enterobacterales-Gammaproteobacteria-Pseudomonadota-Bacteria#C~GCF_030142415.1~NZ_CP122318.1~[4098325..4098630]~562~11"
                     # on simplifie pour accélérer les tris et clarifier les sorties 
