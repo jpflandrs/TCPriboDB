@@ -145,18 +145,19 @@ end
 
 function serializedcat(filea::String,fileb::String,ciblefile::String)
     monfastamiracle::Dict{String,String}=Dict([])
+    lesdesirsdeceline::Dict{String, Dict{String, Vector{String}}}=Dict([])
     # println(filea,"   +   ",fileb,"  ->  ",ciblefile)
     fileb == "nihil" ? ffs=[filea] : ffs=[filea,fileb]
     # println(ffs)
     for f ∈ ffs
         # println("sercat->",f,"  ldic  ",length(keys(monfastamiracle)))
-        monfastamiracle=masolutiondictionnaire(f,monfastamiracle)
+        monfastamiracle=masolutiondictionnaire(f,monfastamiracle,lesdesirsdeceline)
         # println("post sercat  ldic  ",length(keys(monfastamiracle)))
     end
     serialize(ciblefile, monfastamiracle)
 end
 
-function masolutiondictionnaire(initialfasta::String,monfastamiracle::Dict{String,String})
+function masolutiondictionnaire(initialfasta::String,monfastamiracle::Dict{String,String},lesdesirsdeceline::Dict{String, Dict{String, Vector{String}}})
     localfasta::String = ""
     localtete1::String = ""
     localtete2::String = ""
@@ -168,7 +169,7 @@ function masolutiondictionnaire(initialfasta::String,monfastamiracle::Dict{Strin
                         monfastamiracle[localtete1]=localtete2*localfasta #NB normalement sur une ligne donc pas besoin...
                         # println(localtete,"  ",monfastamiracle[localtete])
                     end
-                    localtete1 = rsplit(strip(join(reverse(split(split(String(l),'=')[2],'-' )),'-')*'#'*split(split(String(l),'#' ; limit=2)[2],"!!")[1],'~'),'~'; limit=2)[1]
+                    localtete1 = rsplit(strip(join(reverse(split(split(String(l),'=')[2],'-' )),'-')*'#'*split(split(String(l),'#' ; limit=2)[2],"!!")[1],'~'),'~'; limit=2)[1]*'~'*split(split(l,'|')[2],'#')[1]
                     localtete2 = occursin("!!",l) ? strip(split(l,"!!";limit=2)[1],'~')*'='*join(split(split(l,'=')[2],'-')[1:end-1],'-')*'\n' : l*'\n'
                     #>Escherichia_coli|HT873X1#C~GCF_030142415.1~NZ_CP122318.1~[4098325..4098630]~562~11~!!QCG45_RS20045!36!122!0_RP.!!C.=Bacteria-Pseudomonadota-Gammaproteobacteria-Enterobacterales-Enterobacteriaceae-Escherichia-Escherichia_coli
                     # donne "Escherichia_coli-Escherichia-Enterobacteriaceae-Enterobacterales-Gammaproteobacteria-Pseudomonadota-Bacteria#C~GCF_030142415.1~NZ_CP122318.1~[4098325..4098630]~562~11"
@@ -199,8 +200,8 @@ end
 function main()
 
     #doua
-    # D1="/Users/jean-pierreflandrois/RIBODB/BANQUES/RiboDBBacteria"
-    # D2="/Users/jean-pierreflandrois/RIBODB/BANQUES/RiboDBArchaea"
+    # D1="/Users/jean-pierreflandrois/RIBODB/BANQUES/BACTERIA"
+    # D2="/Users/jean-pierreflandrois/RIBODB/BANQUES/ARCHAEA"
     # #home
     D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"
     D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"
