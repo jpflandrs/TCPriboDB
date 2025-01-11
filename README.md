@@ -1,15 +1,15 @@
 # TCP riboDB
 
-Ce serveur TCP est le moteur de réponses pour le site riboDB. Il peut cependant être employé seul:
+Ce serveur TCP est le moteur de réponses pour le site web **[riboDB](https://github.com/jpflandrs/riboDB)**. Il peut cependant être employé seul:
 
 - 1 pour avoir ses fonctionnalités sur une machine locale ;
 - 2 pour construire des groupes d'intérêt lors de la construction de Bases de Connaissances (BdC) pour un projet (et dans ce cas il est simple d'étendre les familles au _core_ génome).
 
 ## Préparation de la BNF
 
-La BNF est le système de représentation des séquences sous forme de dictionnaire. Une autre solution aurait été l'utilisation d'un SGBD classique. Il y a des raisons multiples à ne pas avoir pris l'option SGBD mais l'idée principale est que le serveur TCP est une solution qui peut être employée chaque fois que l'on crée une BdC (Banque de Connaissance, la nouvelle représentation des génomes) pour permettre des interrogations locales. 
+La BNF est le système de représentation des séquences sous forme de dictionnaire. Une autre solution aurait été l'utilisation d'un SGBD classique. Il y a des raisons multiples à ne pas avoir pris l'option SGBD mais l'idée principale est que le serveur TCP est une solution qui peut être employée chaque fois que l'on crée une BdC (Banque de Connaissance, la nouvelle représentation des génomes) pour permettre des interrogations locales et n'est pas limitée à riboDB.
 
-On part de riboDB dernière version (riboDB est accessible sur demande et par téléchargement via le site du labo et en interne dans le serveur bibi-lab.). RiboDB est un ensemble de fichiers fasta classés par familles et (sauf pour les dRNA) présente 4 fichiers par famille.
+On part de riboDB dernière version (riboDB est accessible sur demande et par téléchargement via le site du labo et en interne dans le serveur bibi-lab). RiboDB est un ensemble de fichiers fasta classés par familles et (sauf pour les dRNA) présente 4 fichiers par famille.
 
 ```famille_prot_uniques.fasta; famille_prot_multiples.fasta; famille_nuc_multiples.fasta; famille_nuc_uniques.fasta``` 
 
@@ -106,10 +106,10 @@ En Julia l'identifiant __unique__ utilisateur est donné par les fonctions suiva
 
 __Notes Importantes__ : 
 Le "\_" étant signifiant dans le programme du serveur, il ne faut pas nommer le classeur contenant les programmes avec le "\_" comme séparateur.
-Le timestamp (dans le complexe timestamp_random_string) est utilisé par le server pour la maintenance du site et ne peut être changé.
+Le timestamp (dans le complexe timestamp_random_string) est utilisé par le serveur pour la maintenance du site (fonction ``putzen``)et ne peut être changé.
 
 ### Emploi
-On doit donner (via le site) la liste des familles désirées (ce sera par défaut toutes), les items du commentaire fasta correspondant à des choses de la taxonomie, des numéroGB et des taxId. Pour le site 5 items peuvent être recherchés parallélement. 
+On doit donner (via le site) la familles désirée (Les items sont envoyés un à un par le site), les items du commentaire fasta correspondant à des choses de la taxonomie, des numéroGB et des taxId. Pour le site 5 items peuvent être recherchés parallélement. 
 ```"Esch,Dickey,Staphy"``` est valable car la recherche se fait sur des fragments. Noter que le ```-``` est signifiant ! ceci peut résoudre des conflits de dénommination.
 On doit éventuellement donner les (n<4) critères de qualité (ceux précédés de #) 
 ```"#T,#R,#E"```
