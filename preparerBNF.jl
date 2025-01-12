@@ -198,6 +198,57 @@ function lisclasseur(classeur::String,tagjoin::Bool)
     return monclasseur
 end
 
+function desreialisation(inputfile::String)
+    monfastamiracle::Dict{String,String}=Dict([])
+    monfastamiracle=deserialize(inputfile)
+end
+
+
+
+function statsbnf(D3) #statistiques
+    diris::String=D3
+    dicotout=[]
+    encyclop=Dict([])
+    dicofamilles=Dict([])
+    lescibles::Vector{String}=lisclasseur(diris,true)
+    for sc in lescibles[10:20] #cas des testts
+        prot::SubString{String}=splitpath(sc)[end]
+        println("     $prot")
+        dicofamilles[prot]=Dict([]) #décompte multiples decompte uniques
+        subcibles::Vector{String}=lisclasseur(sc,true)
+        for subsc in subcibles
+            if occursin("prot",subsc)
+                println(prot,"   ",split(splitpath(subsc)[end],'.')[1])
+                println(subsc)
+                ds=desreialisation(subsc)
+                vectorclés=collect(keys(ds))
+                for i in keys(ds)
+                    isub=split(i,"~")[end]*" "*split(i,"#")[1]*" "*split(i,"~")[2]
+                    push!(dicotout,isub)
+                    isub ∈ keys(dicofamilles[prot]) ? dicofamilles[prot][isub]+=1 : dicofamilles[prot][isub]=1
+                end
+            end
+        end 
+
+    end
+    println(length(Set(dicotout)))
+    for eddy in Set(dicotout)
+        encyclop[eddy]=[]  #initialisation des genomes de pk
+    end
+    titres=[]
+    println(keys(dicofamilles))
+    for famille in keys(dicofamilles)
+        push!(titres,famille)
+        for genome ∈ keys(encyclop)
+            genome ∈ keys(dicofamilles[famille]) ? push!(encyclop[genome],dicofamilles[famille][genome]) : push!(encyclop[genome],0)   
+        end
+    end
+    serialize("ENCYCLOPRIBODB.ser", encyclop)
+    serialize("TITRESENCYCLOP.ser", titres)
+    println(titres)
+    
+end
+
 function main()
 
     #doua
@@ -207,7 +258,7 @@ function main()
     D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"
     D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"
     mélangersérialiserlesribo(D1,D2)
-
+    D3="/Users/jean-pierreflandrois/PKXPLORE/BNKriboDB_SER"
 
 end
 
