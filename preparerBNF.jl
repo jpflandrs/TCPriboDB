@@ -268,7 +268,7 @@ function statsbnf(D3) #statistiques
     serialize("ENCYCLOPRIBODB.ser", encyclop)
     serialize("TITRESENCYCLOP.ser", titres)
 
-    println("DEPLACER LES DICTIONNAIRES DANS LE SITE !!!")
+    println("ATTENTION DEPLACER LES DICTIONNAIRES DANS LE SITE !!!")
 end
 
 function main()
