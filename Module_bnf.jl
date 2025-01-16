@@ -1,3 +1,8 @@
+
+module Module_bnf
+using Serialization
+
+export desreialisation, bnf
 """
 Module_bnf.jl Crée la banque de données du serveur TCP de riboDB
 (bnf en hommage à la BNF)
@@ -34,11 +39,6 @@ The fact that you are presently reading this means that you have had
 knowledge of the [CeCILL|CeCILL-B|CeCILL-C] license and that you accept its terms.
 
 """
-module Module_bnf
-using Serialization
-
-export desreialisation, bnf
-
 function lisclasseur(classeur::String,tagjoin::Bool)
     classeur[end] == '/' ? classeur=classeur[1:(end-1)] : classeur
     monclasseur::Vector{String}=[]
