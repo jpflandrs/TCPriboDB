@@ -101,5 +101,4 @@ function extraitunefamille(encyclo::Dict{String,Dict{String,Dict{String,String}}
     return join(message,";") #dans ce cas on renvoie un à la fois
 end
 
-
 end

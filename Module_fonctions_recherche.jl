@@ -43,6 +43,7 @@ function abinitiowhichresearch(vecteurmotpartiel::Vector{String},vecteurqualité
     #println(" selection  ",vecteurmotpartiel,"  ",vecteurqualité)
     fuzzil(vecteurmotpartiel::Vector{String},vecteurqualité::Vector{String}) #fixe le mode de recherche incomplete 
 end
+
 function fuzzil(vecteurmotpartiel::Vector{String},vecteurqualité::Vector{String})
     #deballage des cas possibles et on va affecter une fonction pour les différents cas 
     lmp=length(vecteurmotpartiel)

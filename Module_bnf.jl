@@ -80,6 +80,13 @@ function bnf()
     return gallica
 end
 
+# function statistiquesbnf(diori)
+# #seulement la lecture des données
+# diris="STATSRIBODB"
+# encyclop::Dict{String,Vector{Int64}}=deserialize(joinpath(diris,"ENCYCLOPRIBODB.ser"))
+# titres::Vector{String}=deserialize(joinpath(diris,"TITRESENCYCLOP.ser"))
+# return(titres,encyclop)
+# end
 
 
 
