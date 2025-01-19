@@ -281,7 +281,7 @@ function main()
     D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"
     D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"
     mélangersérialiserlesribo(D1,D2)
-    D3="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ENSEMBLEdes_serRP_V2"
+    D3=replace(D1,"BACTERIA" => "ENSEMBLEdes_serRP_V2") # "/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ENSEMBLEdes_serRP_V2"
     statsbnf(D3)
     #NB ENSEMBLEdes_serRP_V2 rejoint le site dans PKXPLORE et 
     #titres,diderot=statistiquesbnf("/Users/jean-pierreflandrois/PKXPLORE")

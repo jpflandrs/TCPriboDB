@@ -34,28 +34,38 @@ et Archaea
 Le principe de la préparation est d'associer les séquences de Bacteria et Archaea des familles partagées dans un même fichier tout en créant pour chaque famille et chaque type de protéines, un dictionnaire ```Dict{String,String}``` reliant le commentaire fasta à sa séquence.
 Le tout est _sérialisé_ et prêt à être utilisé. Une option future serait d'utiliser une compression supplémentaire par ```zip``` pour favoriser les échanges (car ceci permet une compression 77%).
 
-C'est __prepareBNF.jl__ qui fait le job. Il n'est __pas situé dans le classeur du serveur__, sa place est dans le classeur du site web car il est vraisemblable que c'est via le site web dans une page d'administration qu'il sera utilisé. Comme dans toutes mes phases de mise au point les adresses sont dans le fichier.jl dans __Main__
+C'est __prepareBNF.jl__ qui fait le job. Comme dans toutes mes phases de mise au point les adresses sont _fixées_ dans le fichier.jl dans __Main__
 
 ```D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"```
 ```D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"```
 
-La sortie est dans un classeur dont le nom est aussi en dur (~l 92): ```ENSEMBLEdes_serRP_V2```
+Ceci est à changer dans le contexte réel. Ainsi `julia prepareBNF.jl` fait le travail.
 
-__Note importante__ : Une version minimale pour les tests est disponible sur demande.
+Prendre les sorties (oui tout n'est pas automatique...):
 
-## Classeur "public/utilisateur"
+- 1) dans un classeur dont le nom est aussi en dur (~l 92): ```ENSEMBLEdes_serRP_V2```
+- 2) dans les fichiers `ENCYCLOPRIBODB.ser` and `TITRESENCYCLOP.ser` 
 
-Cette hiérarchie est à créer dans ce répertoire.
+puis
 
-## le serveur TCP
-
-### Pilote
+- 3) créer ``/SOURCE/`` un classeur en dehors du classeur TCPriboDB 
+- 4) dans ``/SOURCE/`` créer un classeur `BNKriboDB_SER` et y placer le contenu de `ENSEMBLEdes_serRP_V2`
+- 5) dans ``/SOURCE/`` créer un classeur `STATSRIBODB` et y placer les fichiers `ENCYCLOPRIBODB.ser` and `TITRESENCYCLOP.ser`
+- 6) dans ``/SOURCE/`` créer les classeurs `public` et `public/utilisateurs`, `TCPriboDB` et `TCPriboDB/log`
+- 7) créer le conteneur `docker build -t tcpribodb .` 
+- 8) créer le réseau `docker network create ribonetwork`
+- 9) `docker run --name tcpribo  --network ribonetwork -it -p 8080:8080 --mount type=bind,src=/pathto/SOURCE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER --mount type=bind,src=/pathto/SOURCE/public,target=/home/ribo_tcp/app/public --mount type=bind,src=/apthto/SOURCE/TCPriboDB/log/,target=/home/ribo_tcp/app/log tcpribo`
 
 En dehors d'un docker il suffit de lancer:
 
-```julia --project=. ribodb_server.jl```
+```julia --project=. ribodb_server.jl``` mais dans ce cas les classeurs ``BNKriboDB_SER`` et son contenu, `STATSRIBODB` et son contenu, `public` et son contenu et `log` doivent être dans le classeur `TCPriboDB`
 
-Après quelque temps, il retourne une phrase disant que _gallica_ est prête et qu'il écoute.
+__Note importante__ : Les banques de données indispensable sont disponibles sur demande en attendant d'avoir un site ftp.
+
+
+## le serveur TCP
+
+Après le lancement direct ou via le conteneur et une attente de 1minute au moins, il retourne une phrase disant que _gallica_ est prête et qu'il écoute.
 ```gallica fait```
 ```à l'écoute .../TCPriboDB```
 
@@ -77,7 +87,7 @@ sous forme d'un vecteur de Strings.
 
 clientutile.jl n'est __pas situé dans le classeur du serveur__, sa place est dans le classeur du site web, ou ailleurs.
 Pour l'instant c'est une ergonomie minimale, il sera ultérieurement introduit dans le moteur su site Web.
-Attention il ne fonctionne que si l'on a un docker lancé par docker run  -it  -p 8020:8080 tcpribo01 (sinon changer l'adresse du port)
+Attention il ne fonctionne que si l'on a un docker lancé par docker run  -it  -p 8020:8080 tcpribo (sinon changer l'adresse du port)
 clientlocal.jl accède au serveur sans docker au port 8080 de la machine.
 Tels-quels ce sont des exemples de test et il faut donc écrire des applications sur ces exemples.
 
@@ -174,23 +184,7 @@ où l'on retrouve les 4 fichiers habituels.
 Les performances sont acceptables et par exemple rechercher tous les fasta de la banque pour Bacillota sans critère de qualité se fait en 11 secondes.
 Le tmeps de réalisation est linéaire en fonction du nombre de recherches (taxonomie et qualité et nombre de familles), rechercher "Escherichia" ou "Esch" prend le même temps.
 
-Le serveur est multi-utilisateur, le temps de réponse dépend linéairement du nombre d'utilisateurs simultanés, mais même pour 6 utilisateurs strictement simultanés il reste acceptable et la plupart des recherches se font en moins d'une minute.
-
-## Docker
-
-Tout est normalement prévu pour la mise en Docker.
-Depuis le classeur _TCPriboDB_ on lance la construction du conteneur:
-```docker build -t tcpribodb  .```
-Puis on peut l'activer:
-```docker run  -it  -p 8020:8080 tcpribo01```
-Mais il est préférable de placer _BNKriboDB_SER_ et _public..._ en dehors du conteneur:
-```docker run  -it  -p 8020:8080   --mount type=bind,src=/home/flandrs/PKXPLORE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER  --mount type=bind,source=/home/flandrs/PKXPLORE/public,target=/home/ribo_tcp/app/public  ImageId```
-Sur mon mac c'est:
-```docker run  -it  -p 8020:8080   --mount type=bind,src=/Users/jean-pierreflandrois/PKXPLORE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER  --mount type=bind,source=/Users/jean-pierreflandrois/PKXPLORE/public,target=/home/ribo_tcp/app/public tcpribodb```
-Sans Docker les performances sont meilleures de l'ordre de 20%. Si on opte pour cette solution simple (et pas moins stable) il faut soit intégrer BNKriboDB_SER dans le classeur soit faire un lien, soit modifier le programme ```:)```. Dans ce cas, si l'on veut changer c'est ici:
-
-```function bnf()```
-```    diris="BNKriboDB_SER"```
+Le serveur est multi-utilisateur, le temps de réponse dépend linéairement du nombre d'utilisateurs simultanés, mais même pour 10 utilisateurs strictement simultanés il reste acceptable et la plupart des recherches se font en moins d'une minute.
 
 ## License
 
