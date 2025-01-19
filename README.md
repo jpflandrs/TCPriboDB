@@ -1,5 +1,5 @@
 # TCP riboDB
-
+You have **An english version of the installation explanations in [riboDB](https://github.com/jpflandrs/riboDB)**
 Ce serveur TCP est le moteur de réponses pour le site web **[riboDB](https://github.com/jpflandrs/riboDB)**. Il peut cependant être employé seul:
 
 - 1 pour avoir ses fonctionnalités sur une machine locale ;
@@ -33,8 +33,8 @@ et Archaea
 
 Le principe de la préparation est d'associer les séquences de Bacteria et Archaea des familles partagées dans un même fichier tout en créant pour chaque famille et chaque type de protéines, un dictionnaire ```Dict{String,String}``` reliant le commentaire fasta à sa séquence.
 Le tout est _sérialisé_ et prêt à être utilisé. Une option future serait d'utiliser une compression supplémentaire par ```zip``` pour favoriser les échanges (car ceci permet une compression 77%).
-
-C'est __prepareBNF.jl__ qui fait le job. Comme dans toutes mes phases de mise au point les adresses sont _fixées_ dans le fichier.jl dans __Main__
+You have **An english version of the following explanations is in [riboDB](https://github.com/jpflandrs/riboDB)**
+C'est **prepareBNF.jl** qui fait le job. Comme dans toutes mes phases de mise au point les adresses sont _fixées_ dans le fichier.jl dans __Main__
 
 ```D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"```
 ```D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"```
@@ -44,7 +44,7 @@ Ceci est à changer dans le contexte réel. Ainsi `julia prepareBNF.jl` fait le 
 Prendre les sorties (oui tout n'est pas automatique...):
 
 - 1) dans un classeur dont le nom est aussi en dur (~l 92): ```ENSEMBLEdes_serRP_V2```
-- 2) dans les fichiers `ENCYCLOPRIBODB.ser` and `TITRESENCYCLOP.ser` 
+- 2) dans les fichiers `ENCYCLOPRIBODB.ser` et `TITRESENCYCLOP.ser` 
 
 puis
 
