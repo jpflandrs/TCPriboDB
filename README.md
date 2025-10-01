@@ -13,11 +13,22 @@ On part de riboDB dernière version (riboDB est accessible sur demande et par t�
 
 ```famille_prot_uniques.fasta; famille_prot_multiples.fasta; famille_nuc_multiples.fasta; famille_nuc_uniques.fasta``` 
 
+**ATTENTION** : la nouvelle version de l'extracteur des rDNA produit des noms de fichiers __inadéquats__!  les changer comme ici (Archaea et Bacteria) ! exemple :
+```shell
+/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/ENSEMBLEdes_serRP_V2/16SrDNA/16SrDNA_nuc_uniques.ser
+/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/BACTERIA/16SrDNA/16SrDNA.fst
+/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/ENSEMBLEdes_serRP_V2/23SrDNA/23SrDNA_nuc_uniques.ser
+/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/BACTERIA/23SrDNA/23SrDNA.fst
+/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/ENSEMBLEdes_serRP_V2/5SrDNA/5SrDNA_nuc_uniques.ser
+/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/BACTERIA/5SrDNA/5SrDNA.fst 
+```
+En attendant une solution !!!
+
 Archaea et Bacteria sont séparés.
 
 Les familles sont :
 
-```["16SrDNA", "23SrDNA", "5SrDNA", "bTHX", "bl12", "bl17", "bl19", "bl20", "bl21", "bl25", "bl27", "bl28", "bl31", "bl32", "bl33", "bl34", "bl35", "bl36", "bl9", "bs16", "bs18", "bs20", "bs21", "bs6", "cs23", "ul1", "ul10", "ul11", "ul13", "ul14", "ul15", "ul16", "ul18", "ul2", "ul22", "ul23", "ul24", "ul29", "ul3", "ul30", "ul4", "ul5", "ul6", "us10", "us11", "us12", "us13", "us14", "us15", "us17", "us19", "us2", "us3", "us4", "us5", "us7", "us8", "us9", "al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el41", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es4", "es6", "es8", "p1p2"]```
+```["16SrDNA", "23SrDNA", "5SrDNA", "bTHX", "bl12", "bl17", "bl19", "bl20", "bl21", "bl25", "bl27", "bl28", "bl31", "bl32", "bl33", "bl34", "bl35", "bl36", "bl9", "bs16", "bs18", "bs20", "bs21", "bs6", "cs23", "ul1", "ul10", "ul11", "ul13", "ul14", "ul15", "ul16", "ul18", "ul2", "ul22", "ul23", "ul24", "ul29", "ul3", "ul30", "ul4", "ul5", "ul6", "us10", "us11", "us12", "us13", "us14", "us15", "us17", "us19", "us2", "us3", "us4", "us5", "us7", "us8", "us9", "al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es4", "es6", "es8", "p1p2"]```
 
 et les familles suivantes sont partagées par Bacteria et Archaea:
 
@@ -29,15 +40,27 @@ et il y a les familles spécifiques à Bacteria :
 
 et Archaea
 
- ```archaeapropres=["al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el41", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es4", "es6", "es8", "p1p2"]```
+ ```archaeapropres=["al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es4", "es6", "es8", "p1p2"]```
 
 Le principe de la préparation est d'associer les séquences de Bacteria et Archaea des familles partagées dans un même fichier tout en créant pour chaque famille et chaque type de protéines, un dictionnaire ```Dict{String,String}``` reliant le commentaire fasta à sa séquence.
 Le tout est _sérialisé_ et prêt à être utilisé. Une option future serait d'utiliser une compression supplémentaire par ```zip``` pour favoriser les échanges (car ceci permet une compression 77%).
 You have **An english version of the following explanations in [riboDB](https://github.com/jpflandrs/riboDB)**
+
 C'est **prepareBNF.jl** qui fait le job. Comme dans toutes mes phases de mise au point les adresses sont _fixées_ dans le fichier.jl dans __Main__
 
-```D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"```
-```D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"```
+**prepareBNF.jl : C'est long !!!!! car non parallélisé, mais on ne le fait pas souvent.**
+
+
+
+```D1="/Users/jean-pierreflandrois/Documents/ProtéinesDuJour/RIBODB/BACTERIA"```
+```D2="/Users/jean-pierreflandrois/Documents/ProtéinesDuJour/RIBODB/ARCHAEA"```
+
+Mais l'utilisateur, seul vous le connaissez ! il dépend de votre OS.
+
+```D1="/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/BACTERIA"```
+```D2="/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/ARCHAEA"```
+
+```ProtéinesDuJour``` sera un classeur dévolu à ce travail, j'ai abandonné les noms journalisés ici pour simplifier 
 
 Ceci est à changer dans le contexte réel. Ainsi `julia prepareBNF.jl` fait le travail.
 
@@ -49,12 +72,12 @@ Prendre les sorties (oui tout n'est pas automatique...):
 puis
 
 - 3) créer ``/SOURCE/`` un classeur en dehors du classeur TCPriboDB 
-- 4) dans ``/SOURCE/`` créer un classeur `BNKriboDB_SER` et y placer le contenu de `ENSEMBLEdes_serRP_V2`
-- 5) dans ``/SOURCE/`` créer un classeur `STATSRIBODB` et y placer les fichiers `ENCYCLOPRIBODB.ser` and `TITRESENCYCLOP.ser`
+- 4) dans ``/SOURCE/`` créer un classeur `BNKriboDB_SER` et y placer le contenu de `BNKriboDB_SER` qui est dans ```/Users/flandrs/Documents/ProtéinesDuJour
+- 5) dans ``/SOURCE/`` créer un classeur `STATSRIBODB` et y placer les fichiers `ENCYCLOPRIBODB.ser` and `TITRESENCYCLOP.ser` qui sont dans ```/Users/flandrs/Documents/ProtéinesDuJour/STATSRIBODB```
 - 6) dans ``/SOURCE/`` créer les classeurs `public` et `public/utilisateurs`, `TCPriboDB` et `TCPriboDB/log`
 - 7) créer le conteneur `docker build -t tcpribodb .` 
 - 8) créer le réseau `docker network create ribonetwork`
-- 9) `docker run --name tcpribo  --network ribonetwork -it -p 8080:8080 --mount type=bind,src=/pathto/SOURCE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER --mount type=bind,src=/pathto/SOURCE/public,target=/home/ribo_tcp/app/public --mount type=bind,src=/apthto/SOURCE/TCPriboDB/log/,target=/home/ribo_tcp/app/log tcpribo`
+- 9) ``` docker run --name tcpribo  --network ribonetwork -it -p 8080:8080 --mount type=bind,src=/Users/flandrs/Documents/SOURCE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER --mount type=bind,src=/Users/flandrs/Documents/SOURCE/public/TCPriboDB,target=/home/tcp_ribo/app/public --mount type=bind,src=/Users/flandrs/Documents/SOURCE/public/TCPriboDB/log,target=/home/ribo_tcp/app/log tcpribodb```
 
 En dehors d'un docker il suffit de lancer:
 
@@ -116,7 +139,7 @@ En Julia l'identifiant __unique__ utilisateur est donné par les fonctions suiva
 
 __Notes Importantes__ : 
 Le "\_" étant signifiant dans le programme du serveur, il ne faut pas nommer le classeur contenant les programmes avec le "\_" comme séparateur.
-Le timestamp (dans le complexe timestamp_random_string) est utilisé par le serveur pour la maintenance du site (fonction ``putzen``)et ne peut être changé.
+Le timestamp (dans le complexe timestamp_random_string) est utilisé par le serveur pour la maintenance du site (fonction ``putzen``) et ne peut être changé.
 
 ### Emploi
 On doit donner (via le site) la familles désirée (Les items sont envoyés un à un par le site), les items du commentaire fasta correspondant à des choses de la taxonomie, des numéroGB et des taxId. Pour le site 5 items peuvent être recherchés parallélement. 

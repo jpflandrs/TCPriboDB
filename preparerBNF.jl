@@ -129,7 +129,7 @@ function mélangersérialiserlesribo(D1::String,D2::String) #on donne les deux f
     for v ∈ [communs]
         for j ∈ v
             mkdir(joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j))
-            for i ∈ ["_prot_uniques.fasta","_prot_multiples.fasta","_nuc_uniques.fasta","_nuc_multiples.fasta"]
+            for i ∈ ["_prot_uniques.fasta","_prot_multiples.fasta","_nucl_uniques.fasta","_nucl_multiples.fasta"]
                 iser=replace(i,".fasta" => ".ser")
                 serializedcat(joinpath(D1,j,j*i),joinpath(D2,j,j*i),joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j,j*iser))
             end
@@ -139,7 +139,7 @@ function mélangersérialiserlesribo(D1::String,D2::String) #on donne les deux f
     for v ∈ [(bac_seul,"BACTERIA"),(arc_seul,"ARCHAEA")]
         for j ∈ v[1]
             mkdir(joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j))
-            for i ∈ ["_prot_uniques.fasta","_prot_multiples.fasta","_nuc_uniques.fasta","_nuc_multiples.fasta"]
+            for i ∈ ["_prot_uniques.fasta","_prot_multiples.fasta","_nucl_uniques.fasta","_nucl_multiples.fasta"]
                 iser=replace(i,".fasta" => ".ser")
                 serializedcat(joinpath(positiondir,v[2],j,j*i),"nihil",joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j,j*iser))
             end
@@ -227,9 +227,10 @@ function statsbnf(D3) #statistiques
     "bl12", "bl17", "bl19", "bl20", "bl21", "bl25", "bl27", "bl28", "bl31", "bl32", 
     "bl33", "bl34", "bl35", "bl36", "bl9", "bs16", "bs18", "bs20", "bs21", "bs6", "cs23","bTHX",
     "al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30",
-    "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el41", "el42", "el43", "el8", 
+    "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el42", "el43", "el8", 
     "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es4", "es6", "es8", "p1p2",
     "16SrDNA", "23SrDNA", "5SrDNA"]
+    # el41 pas là
     lescibles::Vector{String}=[joinpath(diris,p) for p in titres]
     ###
     for sc in lescibles #cas des testts
@@ -265,8 +266,10 @@ function statsbnf(D3) #statistiques
             genome ∈ keys(dicofamilles[famille]) ? push!(encyclop[genome],dicofamilles[famille][genome]) : push!(encyclop[genome],0)   
         end
     end
-    serialize("ENCYCLOPRIBODB.ser", encyclop)
-    serialize("TITRESENCYCLOP.ser", titres)
+    STATSRIBODB=replace(D3,"ENSEMBLEdes_serRP_V2" => "STATSRIBODB")
+    mkpath(STATSRIBODB)
+    serialize(joinpath(STATSRIBODB,"ENCYCLOPRIBODB.ser"), encyclop)
+    serialize(joinpath(STATSRIBODB,"TITRESENCYCLOP.ser"), titres)
 
     println("ATTENTION DEPLACER LES DICTIONNAIRES DANS LE SITE !!!")
 end
@@ -278,18 +281,12 @@ function main()
     # D2="/Users/jean-pierreflandrois/RIBODB/BANQUES/ARCHAEA"
     # D3 = "/Users/jean-pierreflandrois/RIBODB/BANQUES/ENSEMBLEdes_serRP_V2"
     # #home
-    D1="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/BACTERIA"
-    D2="/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ARCHAEA"
+    D1="/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/BACTERIA"
+    D2="/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/ARCHAEA"
     mélangersérialiserlesribo(D1,D2)
-    D3=replace(D1,"BACTERIA" => "ENSEMBLEdes_serRP_V2") # "/Users/jean-pierreflandrois/Documents/ProtéinesBacteria1612/RIBODB/ENSEMBLEdes_serRP_V2"
+    D3=replace(D1,"BACTERIA" => "BNKriboDB_SER") 
     statsbnf(D3)
-    #NB ENSEMBLEdes_serRP_V2 rejoint le site dans PKXPLORE et 
-    #titres,diderot=statistiquesbnf("/Users/jean-pierreflandrois/PKXPLORE")
-    #or j in keys(diderot)
-    # if recherche2_2(["Bacteria","Archaea"],["#T","#E"],j)
-    #     println("\n",j,"  ",diderot[j])
-    # end
-    # end
+    
 end
 
 main()
