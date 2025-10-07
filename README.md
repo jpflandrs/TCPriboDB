@@ -186,6 +186,47 @@ Ctrl A + Ctrl D (détacher screen)
 
 On voit le résultat en fin de préparation (Cf. paragraphe suivant pour les sorties)
 
+# NGINX Configuration sur le serveur
+
+```shell
+cat /etc/nginx/sites-enabled/my-genie-app 
+
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name   134.214.35.110;
+  root          /;
+  index         welcome.html;
+
+  location / {
+      proxy_http_version 1.1;
+      proxy_pass http://localhost:8000;
+      #websocket specific settings
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host $host;
+  }
+}
+server {
+  listen 8008;
+  listen [::]:8008;
+
+  server_name   134.214.35.110;
+  root          /;
+  index         welcome.html;
+
+  location / {
+      proxy_http_version 1.1;
+      proxy_pass http://localhost:8008;
+      #websocket specific settings
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host $host;
+  }
+}
+
+```
 # Pour travailler en dehors de Docker (pour des tests par ex.) il suffit de lancer:
 Dans le classeur TCPriboDB
 ```shell
