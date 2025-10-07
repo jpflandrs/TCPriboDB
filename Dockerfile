@@ -55,7 +55,8 @@ USER ribo_tcp
 # Set environment variables
 ENV JULIA_DEPOT_PATH="/home/ribo_tcp/.julia"
 ENV JULIA_REVISE="off"
-
+RUN julia -e 'using Pkg; Pkg.Registry.add("General")'
+RUN julia -e 'using Pkg; Pkg.add("JuliaFormatter")'
 # Install Julia packages
 RUN julia --project=. -e "import Pkg; Pkg.resolve(); Pkg.instantiate(); Pkg.precompile();"
 

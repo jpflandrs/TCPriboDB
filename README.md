@@ -69,26 +69,167 @@ Prendre les sorties (oui tout n'est pas automatique...):
 - 1) dans un classeur dont le nom est aussi en dur (~l 92): ```ENSEMBLEdes_serRP_V2```
 - 2) dans les fichiers `ENCYCLOPRIBODB.ser` et `TITRESENCYCLOP.ser` 
 
-puis
+# Structure des classeurs du site (à la fois pour nucworkshop et riboDB)
 
-- 3) créer ``/SOURCE/`` un classeur en dehors du classeur TCPriboDB 
-- 4) dans ``/SOURCE/`` créer un classeur `BNKriboDB_SER` et y placer le contenu de `BNKriboDB_SER` qui est dans ```/Users/flandrs/Documents/ProtéinesDuJour
-- 5) dans ``/SOURCE/`` créer un classeur `STATSRIBODB` et y placer les fichiers `ENCYCLOPRIBODB.ser` and `TITRESENCYCLOP.ser` qui sont dans ```/Users/flandrs/Documents/ProtéinesDuJour/STATSRIBODB```
-- 6) dans ``/SOURCE/`` créer les classeurs `public` et `public/utilisateurs`, `TCPriboDB` et `TCPriboDB/log`
-- 7) créer le conteneur `docker build -t tcpribodb .` 
-- 8) créer le réseau `docker network create ribonetwork`
-- 9) ``` docker run --name tcpribo  --network ribonetwork -it -p 8080:8080 --mount type=bind,src=/Users/flandrs/Documents/SOURCE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER --mount type=bind,src=/Users/flandrs/Documents/SOURCE/public/TCPriboDB,target=/home/tcp_ribo/app/public --mount type=bind,src=/Users/flandrs/Documents/SOURCE/public/TCPriboDB/log,target=/home/ribo_tcp/app/log tcpribodb```
+Typiquement on doit avoir un classeur ```PKXPLORE``` qui sert de banque de données et aussi de résultats.
 
-En dehors d'un docker il suffit de lancer:
+il contient :
+Pour __nucworkshop__ ```PKXPLORE``` (ben oui, même nom, désolé), c'est ce qui concerne la recherche par BLAST sur des banques nucléiques (type rDNA) il n'est pas indispensable pour riboDB mais dans le serveur tout est associé.
 
-```julia --project=. ribodb_server.jl``` mais dans ce cas les classeurs ``BNKriboDB_SER`` et son contenu, `STATSRIBODB` et son contenu, `public` et son contenu et `log` doivent être dans le classeur `TCPriboDB`
+```BNKriboDB_SER``` contient les banques de protéines par familles (riboDB) au format sérialisé		
+
+```STATSRIBODB``` contient les données statistiques précalculées au format sérialisé
+
+```riboDB```, ```TCPriboDB``` et ```log``` pour les logs et enfin ```public```  avec un classeur utilisateurs qui contiendra las extractions
+
+Pour éviter les ennuis, il est recommandé de respecter soigneusement la structure de ```PKXPLORE``` qui va être utilisée par les instructions Docker.
+
+```PKXPLORE``` est donc le classeur qui contient à la fois les données _et_ les résultats
+
+Il contient 
+```PKXPLORE/BLAST```
+```shell
+Ar_TRECS_ChaperoninGroeL.fst                            Ba_TRECS_ChaperoninGroeL.fst.nin                      Ba_TRECS_TranslationElongationFactorTu.fst.nos  cTRECS_23SrRNA.fst.ntf  TRECS_23SrRNA.fst.ndb
+Ar_TRECS_ChaperoninGroeL.fst.ndb                        Ba_TRECS_ChaperoninGroeL.fst.njs                      Ba_TRECS_TranslationElongationFactorTu.fst.not  cTRECS_23SrRNA.fst.nto  TRECS_23SrRNA.fst.nhr
+Ar_TRECS_ChaperoninGroeL.fst.nhr                        Ba_TRECS_ChaperoninGroeL.fst.nog                      Ba_TRECS_TranslationElongationFactorTu.fst.nsq  cTRECS_5SrRNA.fst       TRECS_23SrRNA.fst.nin
+Ar_TRECS_ChaperoninGroeL.fst.nin                        Ba_TRECS_ChaperoninGroeL.fst.nos                      Ba_TRECS_TranslationElongationFactorTu.fst.ntf  cTRECS_5SrRNA.fst.ndb   TRECS_23SrRNA.fst.njs
+Ar_TRECS_ChaperoninGroeL.fst.njs                        Ba_TRECS_ChaperoninGroeL.fst.not                      Ba_TRECS_TranslationElongationFactorTu.fst.nto  cTRECS_5SrRNA.fst.nhr   TRECS_23SrRNA.fst.nog
+Ar_TRECS_ChaperoninGroeL.fst.nog                        Ba_TRECS_ChaperoninGroeL.fst.nsq                      cTRECS_16SrRNA.fst                              cTRECS_5SrRNA.fst.nin   TRECS_23SrRNA.fst.nos
+Ar_TRECS_ChaperoninGroeL.fst.nos                        Ba_TRECS_ChaperoninGroeL.fst.ntf                      cTRECS_16SrRNA.fst.ndb                          cTRECS_5SrRNA.fst.njs   TRECS_23SrRNA.fst.not
+Ar_TRECS_ChaperoninGroeL.fst.not                        Ba_TRECS_ChaperoninGroeL.fst.nto                      cTRECS_16SrRNA.fst.nhr                          cTRECS_5SrRNA.fst.nog   TRECS_23SrRNA.fst.nsq
+Ar_TRECS_ChaperoninGroeL.fst.nsq                        Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst      cTRECS_16SrRNA.fst.nin                          cTRECS_5SrRNA.fst.nos   TRECS_23SrRNA.fst.ntf
+Ar_TRECS_ChaperoninGroeL.fst.ntf                        Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.ndb  cTRECS_16SrRNA.fst.njs                          cTRECS_5SrRNA.fst.not   TRECS_23SrRNA.fst.nto
+Ar_TRECS_ChaperoninGroeL.fst.nto                        Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.nhr  cTRECS_16SrRNA.fst.nog                          cTRECS_5SrRNA.fst.nsq   TRECS_5SrRNA.fst
+Ar_TRECSextended_TranslationElongationFactorTu.fst      Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.nin  cTRECS_16SrRNA.fst.nos                          cTRECS_5SrRNA.fst.ntf   TRECS_5SrRNA.fst.ndb
+Ar_TRECSextended_TranslationElongationFactorTu.fst.ndb  Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.njs  cTRECS_16SrRNA.fst.not                          cTRECS_5SrRNA.fst.nto   TRECS_5SrRNA.fst.nhr
+Ar_TRECSextended_TranslationElongationFactorTu.fst.nhr  Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.nog  cTRECS_16SrRNA.fst.nsq                          TRECS_16SrRNA.fst       TRECS_5SrRNA.fst.nin
+Ar_TRECSextended_TranslationElongationFactorTu.fst.nin  Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.nos  cTRECS_16SrRNA.fst.ntf                          TRECS_16SrRNA.fst.ndb   TRECS_5SrRNA.fst.njs
+Ar_TRECSextended_TranslationElongationFactorTu.fst.njs  Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.not  cTRECS_16SrRNA.fst.nto                          TRECS_16SrRNA.fst.nhr   TRECS_5SrRNA.fst.nog
+Ar_TRECSextended_TranslationElongationFactorTu.fst.nog  Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.nsq  cTRECS_23SrRNA.fst                              TRECS_16SrRNA.fst.nin   TRECS_5SrRNA.fst.nos
+Ar_TRECSextended_TranslationElongationFactorTu.fst.nos  Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.ntf  cTRECS_23SrRNA.fst.ndb                          TRECS_16SrRNA.fst.njs   TRECS_5SrRNA.fst.not
+Ar_TRECSextended_TranslationElongationFactorTu.fst.not  Ba_TRECS_DNADirectedRNAPolymeraseSubunitBeta.fst.nto  cTRECS_23SrRNA.fst.nhr                          TRECS_16SrRNA.fst.nog   TRECS_5SrRNA.fst.nsq
+Ar_TRECSextended_TranslationElongationFactorTu.fst.nsq  Ba_TRECS_TranslationElongationFactorTu.fst            cTRECS_23SrRNA.fst.nin                          TRECS_16SrRNA.fst.nos   TRECS_5SrRNA.fst.ntf
+Ar_TRECSextended_TranslationElongationFactorTu.fst.ntf  Ba_TRECS_TranslationElongationFactorTu.fst.ndb        cTRECS_23SrRNA.fst.njs                          TRECS_16SrRNA.fst.not   TRECS_5SrRNA.fst.nto
+Ar_TRECSextended_TranslationElongationFactorTu.fst.nto  Ba_TRECS_TranslationElongationFactorTu.fst.nhr        cTRECS_23SrRNA.fst.nog                          TRECS_16SrRNA.fst.nsq
+Ba_TRECS_ChaperoninGroeL.fst                            Ba_TRECS_TranslationElongationFactorTu.fst.nin        cTRECS_23SrRNA.fst.nos                          TRECS_16SrRNA.fst.ntf
+Ba_TRECS_ChaperoninGroeL.fst.ndb                        Ba_TRECS_TranslationElongationFactorTu.fst.njs        cTRECS_23SrRNA.fst.not                          TRECS_16SrRNA.fst.nto
+Ba_TRECS_ChaperoninGroeL.fst.nhr                        Ba_TRECS_TranslationElongationFactorTu.fst.nog        cTRECS_23SrRNA.fst.nsq                          TRECS_23SrRNA.fst
+```
+
+```log``` : les logs du site Pkxplore
+
+Comme ```prod-2025-06-30.log  prod-2025-09-12.log...```
+
+```public``` : contient les résultats (dossiers) utilisateurs dans public/utilisateurs
+
+- ```PKXPLORE/public/utilisateurs```
+
+- ```PKXPLORE/public/utilisateurs/task_1759861102339_UcWWhkjM/atelier_1759861102339_UcWWhkjM/...```
+
+```PKXPLORE/STATSRIBODB``` avec
+
+- ```ENCYCLOPRIBODB.ser  TITRESENCYCLOP.ser``` : Les données statistiques pré-calculées
+
+```PKXPLORE/BNKriboDB_SER```
+
+Contient les séquences fasta des familles sous une forme sérialisée dans des classeurs par famille
+```shell 
+16SrDNA  al45  bl12  bl20  bl27  bl32  bl35  bs16  bs21  cs23  el15  el20  el30  el33  el38  el41  el8   es19  es26  es30  es6   ul1   ul13  ul16  ul22  ul29  ul4  us10  us13  us17  us3  us7
+23SrDNA  al46  bl17  bl21  bl28  bl33  bl36  bs18  bs6   el13  el18  el21  el31  el34  el39  el42  es1   es24  es27  es31  es8   ul10  ul14  ul18  ul23  ul3   ul5  us11  us14  us19  us4  us8
+5SrDNA   al47  bl19  bl25  bl31  bl34  bl9   bs20  bTHX  el14  el19  el24  el32  el37  el40  el43  es17  es25  es28  es4   p1p2  ul11  ul15  ul2   ul24  ul30  ul6  us12  us15  us2   us5  us9
+```
+
+Enfin des logs pour riboDB et son serveur TCP :
+
+```PKXPLORE/riboDB/log```
+
+```PKXPLORE/TCPriboDB/log```
+
+# Transférer les classeurs des programme Julia de  TCPriboDB et de riboDB
+
+Le plus simple est de récupérer sur GitHub.
+
+Attention, suivre les instructions ci-dessous pour les serveurs LINUX !
+
+# Docker build et Docker run 
+
+** ON SUPPOSE QUE LE SERVEUR EST UNE MACHINE LINUX **
+
+Donc ```/home/user_name/``` comme base des chemins ! (ici ```/home/flandrs```). Sur MAC c'est ```/Users/flandrs/PKXPLORE``` et il faudra donc changer.
+
+```shell
+screen -S TCP
+docker build -t tcpribodb .
+docker run --name tcpribo  --network jpfnetwork -it -p 8080:8080 --mount type=bind,src=/home/flandrs/PKXPLORE/BNKriboDB_SER,target=/home/ribo_tcp/app/BNKriboDB_SER --mount type=bind,src=/home/flandrs/PKXPLORE/public,target=/home/ribo_tcp/app/public --mount type=bind,src=/home/flandrs/PKXPLORE/TCPriboDB/log/,target=/home/ribo_tcp/app/log tcpribodb
+
+gallica fait
+à l'écoute 
+
+Ctrl A + Ctrl D (détacher screen)
+
+cd riboDB
+screen -S ribodb
+
+docker build -t ribodb .
+sudo docker run --name ribodb --network jpfnetwork -it -p 8008:8008 --mount type=bind,src=/home/flandrs/PKXPLORE/public,target=/home/genie/app/public --mount type=bind,src=/home/flandrs/PKXPLORE/riboDB/log,target=/home/genie/app/log ribodb
+
+ ██████╗ ███████╗███╗   ██╗██╗███████╗    ███████╗
+██╔════╝ ██╔════╝████╗  ██║██║██╔════╝    ██╔════╝
+██║  ███╗█████╗  ██╔██╗ ██║██║█████╗      ███████╗
+██║   ██║██╔══╝  ██║╚██╗██║██║██╔══╝      ╚════██║
+╚██████╔╝███████╗██║ ╚████║██║███████╗    ███████║
+ ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚══════╝    ╚══════╝
+
+[ Info: Binding to host 0.0.0.0 and port 8008 
+Ctrl A + Ctrl D (détacher screen)
+```
+
+On voit le résultat en fin de préparation (Cf. paragraphe suivant pour les sorties)
+
+# Pour travailler en dehors de Docker (pour des tests par ex.) il suffit de lancer:
+Dans le classeur TCPriboDB
+```shell
+julia --project=. -e "import Pkg; Pkg.resolve(); Pkg.instantiate(); Pkg.precompile();"
+julia --project ribodb_server.jl 
+
+gallica fait
+à l'écoute /Users/flandrs/Documents/GitHub/TCPriboDB
+```
+
+Dans le classeur riboDB
+```shell
+julia --project=. -e "import Pkg; Pkg.resolve(); Pkg.instantiate(); Pkg.precompile();"
+julia --project=. ribodb_server.jl
+
+
+ ██████╗ ███████╗███╗   ██╗██╗███████╗    ███████╗
+██╔════╝ ██╔════╝████╗  ██║██║██╔════╝    ██╔════╝
+██║  ███╗█████╗  ██╔██╗ ██║██║█████╗      ███████╗
+██║   ██║██╔══╝  ██║╚██╗██║██║██╔══╝      ╚════██║
+╚██████╔╝███████╗██║ ╚████║██║███████╗    ███████║
+ ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚══════╝    ╚══════╝
+
+[ Info: Binding to host 0.0.0.0 and port 8008 
+Loading appWARNING: replacing module App.
+
+Ready! 
+
+┌ Info: 2025-10-06 20:24:26 
+└ Web Server starting at http://0.0.0.0:8008 - press Ctrl/Cmd+C to stop the server. 
+[ Info: 2025-10-06 20:24:26 Listening on: 0.0.0.0:8008, thread id: 1
+
+``` 
+mais dans ce cas les classeurs décrits plus haut dans ```PKXPLORE``` doivent être copiés/placés dans les classeur GitHub/ribodb et GitHub/TCPriboDB (ils sont vides par défaut).
+
+Enfin on a accès à riboDB dans un navigateur local 
+``` http://localhost:8008/miningribodb ``` 
 
 __Note importante__ : Les banques de données indispensable sont disponibles sur demande en attendant d'avoir un site ftp.
 
 
-## le serveur TCP
+# Fonctionnement du serveur TCP
 
-Après le lancement direct ou via le conteneur et une attente de 1minute au moins, il retourne une phrase disant que _gallica_ est prête et qu'il écoute.
+Après le lancement direct ou via le conteneur et une attente de 1 minute au moins, il retourne une phrase disant que _gallica_ est prête et qu'il écoute.
 ```gallica fait```
 ```à l'écoute .../TCPriboDB```
 
