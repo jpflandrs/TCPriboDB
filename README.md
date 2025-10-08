@@ -1,5 +1,6 @@
 # TCP riboDB
 You have **An english version of the installation explanations in [riboDB](https://github.com/jpflandrs/riboDB)**
+
 Ce serveur TCP est le moteur de réponses pour le site web **[riboDB](https://github.com/jpflandrs/riboDB)**. Il peut cependant être employé seul:
 
 - 1 pour avoir ses fonctionnalités sur une machine locale ;
@@ -227,7 +228,7 @@ server {
 }
 
 ```
-# Pour travailler en dehors de Docker (pour des tests par ex.) il suffit de lancer:
+# Pour travailler en dehors de Docker en local (pour des tests par ex.) il suffit de lancer:
 Dans le classeur TCPriboDB
 ```shell
 julia --project=. -e "import Pkg; Pkg.resolve(); Pkg.instantiate(); Pkg.precompile();"
