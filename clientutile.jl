@@ -108,7 +108,7 @@ function appeltcp()
         query::String="Bacillota" #"Esch,Dickey,Staphy" #"GCA_020907805.1" #"Esch,Dickey,Shig" #"Bacteria,Archaea"
         qual::String=""# #T,#R,#E"
         for ti in tutti
-            message="F1;$ti;$query;$qual;$diruseur\n"
+            message="CNT;$ti;$query;$qual;$diruseur\n"
         #message="FM; ;Esch,Dickey,Shig;#T,#R,#U;/Users/jean-pierreflandrois/Documents\n"
         # (old) message = "RiboDB_16SrDNA,>Methanobrevibacter_woesei|na#U~GCA_020907805.1~K8V75_07880~190976~11~valid=Archaea-Euryarchaeota-Methanobacteria-Methanobacteriales-Methanobacteriaceae-Methanobrevibacter-Methanobrevibacter_woesei\n"
             println("\n**\nSending message: $message")

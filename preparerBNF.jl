@@ -101,6 +101,7 @@ function mélangersérialiserlesribo(D1::String,D2::String) #on donne les deux f
     dnarna::Vector{String}=[nom for nom in intersect(bac,arc) if occursin("DNA",nom)==1]
     bac_seul::Vector{String}=setdiff(bac,arc)
     arc_seul::Vector{String}=setdiff(arc,bac)
+    
     #Pour avoir les sorties décommenter !
     # println("Union ",bac_arch)
     # println("Communs ",bac_i_arch)
@@ -126,15 +127,15 @@ function mélangersérialiserlesribo(D1::String,D2::String) #on donne les deux f
         serializedcat(joinpath(D1,j,j*".fst"),joinpath(D2,j,j*".fst"),joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j,iser))
     end
     
-    for v ∈ [communs]
-        for j ∈ v
-            mkdir(joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j))
-            for i ∈ ["_prot_uniques.fasta","_prot_multiples.fasta","_nucl_uniques.fasta","_nucl_multiples.fasta"]
-                iser=replace(i,".fasta" => ".ser")
-                serializedcat(joinpath(D1,j,j*i),joinpath(D2,j,j*i),joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j,j*iser))
-            end
+    
+    for j ∈ communs
+        mkdir(joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j))
+        for i ∈ ["_prot_uniques.fasta","_prot_multiples.fasta","_nucl_uniques.fasta","_nucl_multiples.fasta"]
+            iser=replace(i,".fasta" => ".ser")
+            serializedcat(joinpath(D1,j,j*i),joinpath(D2,j,j*i),joinpath(positiondir,"ENSEMBLEdes_serRP_V2",j,j*iser))
         end
     end
+    
 
     for v ∈ [(bac_seul,"BACTERIA"),(arc_seul,"ARCHAEA")]
         for j ∈ v[1]
@@ -241,12 +242,16 @@ function statsbnf(D3) #statistiques
         for subsc in subcibles
             if occursin("nuc",subsc)
                 println(prot,"   ",split(splitpath(subsc)[end],'.')[1])
-                println(subsc)
+                println("subsc, $subsc")
                 ds=desreialisation(subsc)
                 vectorclés=collect(keys(ds))
                 for i in keys(ds)
-                    #Nocardia_aurantia-Nocardia-Nocardiaceae-Mycobacteriales-Actinomycetes-Actinomycetota-Bacteria#R#T#U~GCF_009604425.1~NZ_WEGI01000013.1~[204468..204854]~2585199~RB56
-                    isub=split(i,"~")[end-1]*" "*split(i,"~")[1]*" "*split(i,"~")[2]
+                    #println(i)
+                    #format de la forme sérialisée !!!
+                    #cAciduliprofundum_unclassified-cAciduliprofundum-no_family-no_order-no_class-Thermoplasmatota-Archaea#E#S~GCA_000151085.1~ABOONEI_911~C[58864..59505]~379547
+                    isub=split(i,"~")[end-3]*" "*split(i,"~")[1]#*" "*split(i,"~")[1]#*" "*split(i,"~")[2]#*" "*split(i,"~")[end-1]
+                    #println(isub)
+                    #GCF_021045125.1 Bacillus_licheniformis-Bacillus-Bacillaceae-Bacillales-Bacilli-Bacillota-Bacteria#S
                     push!(dicotout,isub)
                     isub ∈ keys(dicofamilles[prot]) ? dicofamilles[prot][isub]+=1 : dicofamilles[prot][isub]=1
                 end
@@ -279,12 +284,12 @@ function main()
     #doua
     # D1="/Users/jean-pierreflandrois/RIBODB/BANQUES/BACTERIA"
     # D2="/Users/jean-pierreflandrois/RIBODB/BANQUES/ARCHAEA"
-    # D3 = "/Users/jean-pierreflandrois/RIBODB/BANQUES/ENSEMBLEdes_serRP_V2"
+    # D3 = "/Users/flandrs/PKXPLORE/BNKriboDB_SER"
     # #home
     D1="/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/BACTERIA"
     D2="/Users/flandrs/Documents/ProtéinesDuJour/RIBODB/ARCHAEA"
-    mélangersérialiserlesribo(D1,D2)
-    D3=replace(D1,"BACTERIA" => "BNKriboDB_SER") 
+    #mélangersérialiserlesribo(D1,D2)
+    D3=replace(D1,"BACTERIA" => "ENSEMBLEdes_serRP_V2") 
     statsbnf(D3)
     
 end

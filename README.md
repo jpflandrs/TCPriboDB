@@ -241,7 +241,8 @@ gallica fait
 Dans le classeur riboDB
 ```shell
 julia --project=. -e "import Pkg; Pkg.resolve(); Pkg.instantiate(); Pkg.precompile();"
-julia --project=. ribodb_server.jl
+
+julia --project=. ribodb_site.jl
 
 
  ██████╗ ███████╗███╗   ██╗██╗███████╗    ███████╗
