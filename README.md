@@ -25,11 +25,30 @@ On part de riboDB dernière version (riboDB est accessible sur demande et par t�
 ```
 En attendant une solution !!!
 
+### l'exemple de l'incorporation de es32
+après avoir reconstruit la BdC
+```julia -p 18 Uercaria.jl /Users/flandrs/Documents/GitHub/MagioTagos/examples/BnkGlobale_Archaea```
+
+je fabrique les RP
+```julia  -p 18 Sagillia.jl -r /Users/flandrs/Documents/GitHub/MagioTagos/examples/BnkGlobale_Archaea```
+
+Je copie le contenu de Phase2_collecteur dans le classeur déjà existant /Users/flandrs/Documents/ProtéinesDuJour/RIBODB/ENSEMBLEdes_serRP_V2 SANS toucher au rDNA qui ne change pas et je ne touche pas Bacteria car je change seulement les Archaea
+
+Et je lance prépareBNF !
+
+Et transfert sur le vieux mac ... ENSEMBLEdes_serRP_V2 devient BNKriboDB_SER dans le serveur !
+
+
+
+
+
 Archaea et Bacteria sont séparés.
 
 Les familles sont :
 
-```["16SrDNA", "23SrDNA", "5SrDNA", "bTHX", "bl12", "bl17", "bl19", "bl20", "bl21", "bl25", "bl27", "bl28", "bl31", "bl32", "bl33", "bl34", "bl35", "bl36", "bl9", "bs16", "bs18", "bs20", "bs21", "bs6", "cs23", "ul1", "ul10", "ul11", "ul13", "ul14", "ul15", "ul16", "ul18", "ul2", "ul22", "ul23", "ul24", "ul29", "ul3", "ul30", "ul4", "ul5", "ul6", "us10", "us11", "us12", "us13", "us14", "us15", "us17", "us19", "us2", "us3", "us4", "us5", "us7", "us8", "us9", "al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es4", "es6", "es8", "p1p2"]```
+```["16SrDNA", "23SrDNA", "5SrDNA", "bTHX", "bl12", "bl17", "bl19", "bl20", "bl21", "bl25", "bl27", "bl28", "bl31", "bl32", "bl33", "bl34", "bl35", "bl36", "bl9", "bs16", "bs18", "bs20", "bs21", "bs6", "cs23", "ul1", "ul10", "ul11", "ul13", "ul14", "ul15", "ul16", "ul18", "ul2", "ul22", "ul23", "ul24", "ul29", "ul3", "ul30", "ul4", "ul5", "ul6", "us10", "us11", "us12", "us13", "us14", "us15", "us17", "us19", "us2", "us3", "us4", "us5", "us7", "us8", "us9", "al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es32", "es4", "es6", "es8", "p1p2"]```
+
+** Attention, Renaming of eL41 to es32 !! **
 
 et les familles suivantes sont partagées par Bacteria et Archaea:
 
@@ -41,7 +60,7 @@ et il y a les familles spécifiques à Bacteria :
 
 et Archaea
 
- ```archaeapropres=["al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es4", "es6", "es8", "p1p2"]```
+ ```archaeapropres=["al45", "al46", "al47", "el13", "el14", "el15", "el18", "el19", "el20", "el21", "el24", "el30", "el31", "el32", "el33", "el34", "el37", "el38", "el39", "el40", "el42", "el43", "el8", "es1", "es17", "es19", "es24", "es25", "es26", "es27", "es28", "es30", "es31", "es32", "es4", "es6", "es8", "p1p2"]```
 
 Le principe de la préparation est d'associer les séquences de Bacteria et Archaea des familles partagées dans un même fichier tout en créant pour chaque famille et chaque type de protéines, un dictionnaire ```Dict{String,String}``` reliant le commentaire fasta à sa séquence.
 Le tout est _sérialisé_ et prêt à être utilisé. Une option future serait d'utiliser une compression supplémentaire par ```zip``` pour favoriser les échanges (car ceci permet une compression 77%).
