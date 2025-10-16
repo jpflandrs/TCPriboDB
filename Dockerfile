@@ -66,6 +66,8 @@
 # # Set entrypoint
 # ENTRYPOINT ["julia", "--project=.", "ribodb_server.jl"]
 
+
+
 FROM julia:1.11
 
 # Create user and set up directories
